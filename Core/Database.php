@@ -6,7 +6,7 @@ class Database {
     public function __construct()
     {
         try {
-            require "../../.gitignore/config.php";
+            require "Config/config.php";
 
             $this->host = $dbConfig["host"];
             $this->dbname = $dbConfig["dbname"];
