@@ -109,6 +109,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
+  'isActive' BOOLEAN NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `index_username` (`username`),
   UNIQUE KEY `index_email` (`email`)
