@@ -12,19 +12,39 @@ class UserController{
     }
     
     private static function createSession($username, $email, $password) {
-        session_start();
+        $_SESSION["loggedin"] = true;
         $_SESSION["username"] = $username;
         $_SESSION["email"] = $email;
         $_SESSION["password"] = $password;
+    }
+
+    private static function endSession() {
+        session_unset();
+        $_SESSION["loggedin"] = false;
+    }
+
+    public function deconnect($email) {
+        UserController::endSession();
+
+        //Set status of user to offline in database
+        $this->model->prepare("UPDATE user SET isActive=0 WHERE email='$email'");
+    }
+
+    private function connect($username, $email, $password) {
+        UserController::createSession($username, $email, $password);
+
+        //Change status of user to active
+        $this->model->prepare("UPDATE user SET isActive=1 WHERE email='$email'");
     }
 
     public function inscription()
     {
         $signupIsSuccessful = false;
 
+        //Vérification de la présence de toute les informations pour l'inscription
         if(!empty($_POST["username"]) && !empty($_POST["email"]) && !empty($_POST["password"])) {
         
-            // Récupérer les infos de $_POST et les "sécuriser" en utilisant htmlspecialchars
+            // Get secured POST data 
             $username = htmlspecialchars($_POST["username"]);
             $email = htmlspecialchars($_POST["email"]);
             $password = htmlspecialchars($_POST["password"]);
@@ -32,27 +52,34 @@ class UserController{
             //Verify that the email is valid
             if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 
-                //Vérifier si un utilisateur n'utilise pas déjà l'email ou le pseudo
+                //Check if there is already a user with this email or username
                 $sameEmail = $this->model->SelectUserFromEmail($email);
                 $sameUsername = $this->model->SelectUserFromUsername($username);
     
+                //If no one has the same email or username
                 if (empty($sameEmail) && empty($sameUsername)) {
-                    $requestWorked = $this->model->prepare("INSERT INTO user (username, email, password) VALUES (:username, :email, :password)", array(':username' => $username, ':email' => $email, ':password' => password_hash($password, PASSWORD_DEFAULT)));
+                    //Send the user data to the database
+                    $this->model->prepare("INSERT INTO user(username, email, password) VALUES (:username, :email, :password)", array(':username' => $username, ':email' => $email, ':password' => password_hash($password, PASSWORD_DEFAULT)));
 
-                    //Start session of user
-                    UserController::createSession($username, $email, $password);
-
-                    //Change status of user to active
-                    $this->model->prepare("UPDATE user SET isActive=1 WHERE email='$email'");
+                    //Connect the user
+                    $this->connect($username, $email, $password);
 
                     $signupIsSuccessful = true;
-
                 } else if(!empty($sameEmail)) {
-                    //Afficher erreur que l'email est déjà utilisé
+                    //TODO Display an error saying that the email is already used
+                    echo "<p>email déjà utilisé</p>";
                 } else {
-                    //Afficher erreur que le pseudo est déjà utilisé
+                    //TODO Display an error saying that the username is already used
+                    echo "<p>pseudo déjà utilisé</p>";
                 }
+            } else {
+                //TODO Display an error saying that the email was wrongly formatted
+                echo "<p>format email incorrect</p>";
             }
+        } else {
+            //TODO Display an error saying that a field is missing
+            //AJAX pour conserver les données (entrées dans un fichier temp)?
+            echo "<p>remplir tous les champs</p>";
         }
 
         return $signupIsSuccessful;
@@ -72,11 +99,9 @@ class UserController{
             $userData = $this->model->selectUserFromEmail($email);
             // vérifier password
             if($userData->email == $email && password_verify($password, $userData->password)) {
-                //Start session of user
-                UserController::createSession($userData["username"], $userData["email"], $userData["password"]);
 
-                //Change status of user to active
-                $this->model->prepare("UPDATE user SET isActive=1 WHERE email='$email'");
+                //Connect the user
+                $this->connect($userData->username, $userData->email, $userData->password);
 
                 $signinIsSuccessful = true;
             } else {

@@ -7,14 +7,14 @@
 </head>
 <body>
     <h1>Connexion</h1>
-    <form id="loginForm" action="index.php?page=connexion&action=login" method="post">
+    <form id="loginForm" action="index.php" method="post">
         <label for="email">Email</label><br>
         <input type="text" id="email" name="email"><br>
 
         <label for="password">Mot de passe</label><br>
         <input type="text" id="password" name="password"><br>
         
-        <button type="submit">Connexion</button>
+        <button type="submit" name="action" value="connect">Connexion</button>
     </form>
 </body>
 </html>
