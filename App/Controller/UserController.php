@@ -37,6 +37,13 @@ class UserController{
         $this->model->prepare("UPDATE user SET isActive=1 WHERE email='$email'");
     }
 
+    public static function redirect() {
+        if (session_status() == PHP_SESSION_ACTIVE && $_SESSION['loggedin']) {
+            header("Location: index.php?page=accueil");
+            exit;
+        }
+    }
+
     public function inscription()
     {
         $signupIsSuccessful = false;

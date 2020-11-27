@@ -1,3 +1,4 @@
+<?php App\Controller\UserController::redirect(); ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
