@@ -2,3 +2,58 @@
     margin: 0;
     padding: 0;
 }
+
+:root {
+    --color-header-bg: #636363;
+    --color-border-nav-buttons: #313131;
+    --color-font-nav-buttons: #e7e7e7;
+    --color-font-nav-buttons-active: #b6b6b6;
+    --header-height: 50px;
+    --padding-nav-buttons: 5px 10px;
+    --border-nav-buttons: solid var(--color-border-nav-buttons) 1px;
+}
+
+.main-header {
+    width: 100vw;
+    height: var(--header-height);
+    background-color: var(--color-header-bg);
+}
+    .main-header nav {
+        width: 80%;
+        height: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+    }
+    .main-header ul {
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        list-style: none;
+    }
+    .main-header a {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: var(--padding-nav-buttons);
+        border: var(--border-nav-buttons);
+        color: var(--color-font-nav-buttons);
+        text-decoration: none;
+    }
+        .main-header a:hover {
+            text-decoration: underline;
+        }
+        .main-header a:active {
+            transform: scale(0.9);
+            color: var(--color-font-nav-buttons-active);
+        }
+
+.offline-buttons {
+    display: flex;
+}
+    .offline-buttons hr {
+        border: none;
+        background-color: var(--color-border-nav-buttons);
+        width: 2px;
+        margin: 0 10px;
+    }
