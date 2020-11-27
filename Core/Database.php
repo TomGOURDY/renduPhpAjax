@@ -46,6 +46,6 @@ class Database{
     public function prepare($statement, $data = array())
     {
         $prepare = $this->pdo->prepare($statement);
-        $prepare->execute($data);
+        return $prepare->execute($data);
     }
 }
