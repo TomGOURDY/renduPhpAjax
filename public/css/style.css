@@ -3,6 +3,17 @@
     padding: 0;
 }
 
+/* Normalize buttons */
+button {
+    -webkit-appearance: button;
+    text-transform: none;
+    overflow: visible;
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+}
+
 :root {
     --color-header-bg: #636363;
     --color-border-nav-buttons: #313131;
@@ -32,28 +43,36 @@
         justify-content: space-around;
         list-style: none;
     }
-    .main-header a {
+    .main-header a, .main-header button {
         display: inline-block;
         box-sizing: border-box;
+        font-size: 1em;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 400;
         padding: var(--padding-nav-buttons);
         border: var(--border-nav-buttons);
         color: var(--color-font-nav-buttons);
+        background-color: var(--color-header-bg);
         text-decoration: none;
     }
-        .main-header a:hover {
+        .main-header a:hover, .main-header button:hover {
             text-decoration: underline;
         }
-        .main-header a:active {
+        .main-header a:active, .main-header button:active {
             transform: scale(0.9);
             color: var(--color-font-nav-buttons-active);
+            outline: 0;
         }
 
-.offline-buttons {
+
+
+[class$="-buttons"] {
     display: flex;
 }
-    .offline-buttons hr {
-        border: none;
-        background-color: var(--color-border-nav-buttons);
-        width: 2px;
-        margin: 0 10px;
-    }
+
+hr {
+    border: none;
+    background-color: var(--color-border-nav-buttons);
+    width: 2px;
+    margin: 0 10px;
+}

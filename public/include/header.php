@@ -5,7 +5,7 @@
             <li><a href="index.php?page=amis">Amis</a></li>
             <li><a href="index.php?page=sondage">Nouveau sondage</a></li>
             <?php if (session_status() == PHP_SESSION_ACTIVE && $_SESSION['loggedin']) { ?>
-                <li>
+                <li class="online-buttons">
                     <a href='index.php?page=profil'>Profil</a>
                     <hr>
                     <form action="index.php" method="post">
