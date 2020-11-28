@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : ven. 13 nov. 2020 à 14:08
+-- Généré le : sam. 28 nov. 2020 à 01:08
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.2.19
 
@@ -29,15 +29,13 @@ USE `projetgroupephp`;
 -- Structure de la table `chat_message`
 --
 
-CREATE TABLE IF NOT EXISTS `chat_message` (
-  `message_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `chat_message`;
+CREATE TABLE `chat_message` (
+  `message_id` int(11) NOT NULL,
   `chat_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `sent_date` datetime NOT NULL,
-  `content` varchar(2000) NOT NULL,
-  PRIMARY KEY (`message_id`),
-  KEY `fk_chatmessage_chatthread_chatid` (`chat_id`),
-  KEY `fk_chatmessage_user_userid` (`user_id`)
+  `content` varchar(2000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -46,11 +44,10 @@ CREATE TABLE IF NOT EXISTS `chat_message` (
 -- Structure de la table `chat_thread`
 --
 
-CREATE TABLE IF NOT EXISTS `chat_thread` (
-  `chat_id` int(11) NOT NULL AUTO_INCREMENT,
-  `poll_id` int(11) NOT NULL,
-  PRIMARY KEY (`chat_id`),
-  KEY `fk_chatthread_poll_pollid` (`poll_id`)
+DROP TABLE IF EXISTS `chat_thread`;
+CREATE TABLE `chat_thread` (
+  `chat_id` int(11) NOT NULL,
+  `poll_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -59,13 +56,11 @@ CREATE TABLE IF NOT EXISTS `chat_thread` (
 -- Structure de la table `friendship`
 --
 
-CREATE TABLE IF NOT EXISTS `friendship` (
-  `friendship_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `friendship`;
+CREATE TABLE `friendship` (
+  `friendship_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `friend_id` int(11) NOT NULL,
-  PRIMARY KEY (`friendship_id`),
-  KEY `fk_friendship_user_userid` (`user_id`),
-  KEY `fk_friendship_user_friendid` (`friend_id`)
+  `friend_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -74,13 +69,12 @@ CREATE TABLE IF NOT EXISTS `friendship` (
 -- Structure de la table `poll`
 --
 
-CREATE TABLE IF NOT EXISTS `poll` (
-  `poll_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `poll`;
+CREATE TABLE `poll` (
+  `poll_id` int(11) NOT NULL,
   `creator_id` int(11) NOT NULL,
   `title` varchar(200) NOT NULL,
-  `deadline` datetime NOT NULL,
-  PRIMARY KEY (`poll_id`),
-  KEY `fk_poll_user_creatorid` (`creator_id`)
+  `deadline` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -89,13 +83,12 @@ CREATE TABLE IF NOT EXISTS `poll` (
 -- Structure de la table `poll_answer`
 --
 
-CREATE TABLE IF NOT EXISTS `poll_answer` (
-  `answer_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `poll_answer`;
+CREATE TABLE `poll_answer` (
+  `answer_id` int(11) NOT NULL,
   `poll_id` int(11) NOT NULL,
   `title` varchar(200) NOT NULL,
-  `is_correct` tinyint(1) NOT NULL,
-  PRIMARY KEY (`answer_id`),
-  KEY `fk_pollanswer_poll_pollid` (`poll_id`)
+  `is_correct` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -104,16 +97,21 @@ CREATE TABLE IF NOT EXISTS `poll_answer` (
 -- Structure de la table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  'isActive' BOOLEAN NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `index_username` (`username`),
-  UNIQUE KEY `index_email` (`email`)
+  `isActive` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `isActive`) VALUES
+(1, 'test', 'test@gmail.com', '$2y$10$/2oQS6t3/QRpniJ0Y3pmEejGn4Kxy3S7a7k3YWV0Ca6PUF6/9EOKG', 1);
 
 -- --------------------------------------------------------
 
@@ -121,14 +119,115 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Structure de la table `user_answer`
 --
 
-CREATE TABLE IF NOT EXISTS `user_answer` (
-  `answer_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'L''ID de la réponse',
+DROP TABLE IF EXISTS `user_answer`;
+CREATE TABLE `user_answer` (
+  `answer_id` int(11) NOT NULL COMMENT 'L''ID de la réponse',
   `user_id` int(11) NOT NULL COMMENT 'L''ID de l''utilisateur ayant fourni cette réponse',
-  `poll_answer_id` int(11) NOT NULL COMMENT 'L''ID de la question à laquelle l''utilisateur a répondu',
-  PRIMARY KEY (`answer_id`),
-  KEY `fk_useranswer_pollanswer_pollanswerid` (`poll_answer_id`),
-  KEY `fk_useranswer_user_userid` (`user_id`)
+  `poll_answer_id` int(11) NOT NULL COMMENT 'L''ID de la question à laquelle l''utilisateur a répondu'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `chat_message`
+--
+ALTER TABLE `chat_message`
+  ADD PRIMARY KEY (`message_id`),
+  ADD KEY `fk_chatmessage_chatthread_chatid` (`chat_id`),
+  ADD KEY `fk_chatmessage_user_userid` (`user_id`);
+
+--
+-- Index pour la table `chat_thread`
+--
+ALTER TABLE `chat_thread`
+  ADD PRIMARY KEY (`chat_id`),
+  ADD KEY `fk_chatthread_poll_pollid` (`poll_id`);
+
+--
+-- Index pour la table `friendship`
+--
+ALTER TABLE `friendship`
+  ADD PRIMARY KEY (`friendship_id`),
+  ADD KEY `fk_friendship_user_userid` (`user_id`),
+  ADD KEY `fk_friendship_user_friendid` (`friend_id`);
+
+--
+-- Index pour la table `poll`
+--
+ALTER TABLE `poll`
+  ADD PRIMARY KEY (`poll_id`),
+  ADD KEY `fk_poll_user_creatorid` (`creator_id`);
+
+--
+-- Index pour la table `poll_answer`
+--
+ALTER TABLE `poll_answer`
+  ADD PRIMARY KEY (`answer_id`),
+  ADD KEY `fk_pollanswer_poll_pollid` (`poll_id`);
+
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `index_username` (`username`),
+  ADD UNIQUE KEY `index_email` (`email`);
+
+--
+-- Index pour la table `user_answer`
+--
+ALTER TABLE `user_answer`
+  ADD PRIMARY KEY (`answer_id`),
+  ADD KEY `fk_useranswer_pollanswer_pollanswerid` (`poll_answer_id`),
+  ADD KEY `fk_useranswer_user_userid` (`user_id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `chat_message`
+--
+ALTER TABLE `chat_message`
+  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `chat_thread`
+--
+ALTER TABLE `chat_thread`
+  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `friendship`
+--
+ALTER TABLE `friendship`
+  MODIFY `friendship_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `poll`
+--
+ALTER TABLE `poll`
+  MODIFY `poll_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `poll_answer`
+--
+ALTER TABLE `poll_answer`
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT pour la table `user_answer`
+--
+ALTER TABLE `user_answer`
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'L''ID de la réponse';
 
 --
 -- Contraintes pour les tables déchargées
