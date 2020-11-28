@@ -11,11 +11,23 @@ class UserController{
         $this->model = new UserModel();
     }
     
-    private static function createSession($username, $email, $password) {
-        $_SESSION["loggedin"] = true;
-        $_SESSION["username"] = $username;
-        $_SESSION["email"] = $email;
-        $_SESSION["password"] = $password;
+    private static function createSession($loggedin = true) {
+        $_SESSION["loggedin"] = $loggedin;
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            foreach($_POST as $inputName => $value) {
+                $_SESSION['fields'][$inputName] = $value;
+            }
+        }
+    }
+
+    private static function saveErrors($errorArray) {
+        foreach($errorArray as $errorName => $value) {
+            $_SESSION['errors'][$errorName] = $value;
+        }
+    }
+
+    public static function fieldvalue( $fields, $field=false ){
+        return ( $field && !empty( $field ) && isset( $_SESSION[ $fields ] ) && array_key_exists( $field, $_SESSION[ $fields ] ) ) ? $_SESSION[ $fields ][ $field ] : '';
     }
 
     private static function endSession() {
@@ -48,14 +60,13 @@ class UserController{
     {
         $signupIsSuccessful = false;
 
+        // Get secured POST data 
+        $username = htmlspecialchars($_POST["username"]);
+        $email = htmlspecialchars($_POST["email"]);
+        $password = htmlspecialchars($_POST["password"]);
+
         //Vérification de la présence de toute les informations pour l'inscription
         if(!empty($_POST["username"]) && !empty($_POST["email"]) && !empty($_POST["password"])) {
-        
-            // Get secured POST data 
-            $username = htmlspecialchars($_POST["username"]);
-            $email = htmlspecialchars($_POST["email"]);
-            $password = htmlspecialchars($_POST["password"]);
-
             //Verify that the email is valid
             if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 
@@ -73,20 +84,38 @@ class UserController{
 
                     $signupIsSuccessful = true;
                 } else if(!empty($sameEmail)) {
-                    //TODO Display an error saying that the email is already used
-                    echo "<p>email déjà utilisé</p>";
+                    //Display an error saying that the email is already used
+                    UserController::createSession(false);
+
+                    UserController::saveErrors(array('usernameError' => "", 'emailError' => "Cette adresse email est déjà utilisée. Veuillez en renseigner une autre.", 'passwordError' => ""));
                 } else {
-                    //TODO Display an error saying that the username is already used
-                    echo "<p>pseudo déjà utilisé</p>";
+                    //Display an error saying that the username is already used
+                    UserController::createSession(false);
+
+                    UserController::saveErrors(array('usernameError' => "Ce pseudo est déjà utilisé. Veuillez en renseigner un autre.", 'emailError' => "", 'passwordError' => ""));
                 }
             } else {
-                //TODO Display an error saying that the email was wrongly formatted
-                echo "<p>format email incorrect</p>";
+                //Display an error saying that the email was wrongly formatted
+                UserController::createSession(false);
+
+                UserController::saveErrors(array('usernameError' => "", 'emailError' => "Veuillez renseigner une adresse email valide.", 'passwordError' => ""));
             }
         } else {
-            //TODO Display an error saying that a field is missing
-            //AJAX pour conserver les données (entrées dans un fichier temp)?
-            echo "<p>remplir tous les champs</p>";
+            //Display an error saying that a field is missing
+            $emailError = $passwordError = $usernameError = '';
+
+            UserController::createSession(false);
+
+            if (empty($_POST["username"])) {
+                $usernameError = "Veuillez renseigner votre nom d'utilisateur.";
+            }
+            if (empty($_POST["email"])) {
+                $emailError = "Veuillez renseigner votre adresse email.";
+            }
+            if (empty($_POST["password"])) {
+                $passwordError = "Veuillez renseigner votre mot de passe.";
+            }
+            UserController::saveErrors(array('usernameError' => $usernameError, 'emailError' => $emailError, 'passwordError' => $passwordError));
         }
 
         return $signupIsSuccessful;
