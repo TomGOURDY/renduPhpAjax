@@ -7,7 +7,7 @@
             <?php if (session_status() == PHP_SESSION_ACTIVE && $_SESSION['loggedin']) { ?>
                 <li class="online-buttons">
                     <a href='index.php?page=profil'>Profil</a>
-                    <hr>
+                    <hr class="vertical-separator">
                     <form action="index.php" method="post">
                         <button type="submit" name="action" value="deconnect">Déconnexion</button>
                     </form>
@@ -15,7 +15,7 @@
             <?php } else { ?>
                 <li class="offline-buttons">
                     <a href='index.php?page=connexion'>Connexion</a>
-                    <hr>
+                    <hr class="vertical-separator">
                     <a href="index.php?page=inscription">Inscription</a>
                 </li>
             <?php } ?>

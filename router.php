@@ -53,6 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
         case 'inscription':
             require ROOT."/App/View/inscriptionView.php";
             break;
+        case 'amis':
+            require ROOT."/App/View/friendsView.php";
+            break;
     }
 } else {
     require ROOT."/App/View/accueilView.php"; //Default page
