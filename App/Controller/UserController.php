@@ -125,35 +125,51 @@ class UserController{
     {
         $signinIsSuccessful = false;
 
+        $email = htmlspecialchars($_POST["email"]);
+        $password = htmlspecialchars($_POST["password"]);
+
         if (!empty($_POST["email"]) && !empty($_POST["password"])) {
-            $email = htmlspecialchars($_POST["email"]);
-            $password = htmlspecialchars($_POST["password"]);
+            //Verify that the email is valid
+            if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $userData = $this->model->selectUserFromEmail($email);
+    
+                // vérifier password
+                if($userData->email == $email && password_verify($password, $userData->password)) {
+    
+                    //Connect the user
+                    $this->connect($userData->username, $userData->email, $userData->password);
+    
+                    $signinIsSuccessful = true;
+                } else if($userData->email != $email) {
+                    //Display an error saying that this email does not exist
+                    UserController::createSession(false);
 
-            // $model = new UserModel();
-            // SELECT
-            //$model->selectUser();
-            $userData = $this->model->selectUserFromEmail($email);
-            // vérifier password
-            if($userData->email == $email && password_verify($password, $userData->password)) {
+                    UserController::saveErrors(array('emailError' => "Cette adresse email n'est pas enregistrée sur ce site.", 'passwordError' => ""));
+                } else if (!password_verify($password, $userData->password)) {
+                    //Display an error saying that the password is incorrect
+                    UserController::createSession(false);
 
-                //Connect the user
-                $this->connect($userData->username, $userData->email, $userData->password);
-
-                $signinIsSuccessful = true;
+                    UserController::saveErrors(array('emailError' => "", 'passwordError' => "Mot de passe erroné."));
+                }
             } else {
-                //Redirect user to form
-                // header("index.php?page=accueil");
-                // exit;
-            }
-            // true => header
-            // false => formulaire
-        } else {
-            // require ConnexionView
-            // require ROOT."App/View/connexionView.php";
+                //Display an error saying that the email was wrongly formatted
+                UserController::createSession(false);
 
-            //Redirect user to form
-            // header("index.php?page=connexion");
-            // exit;
+                UserController::saveErrors(array('emailError' => "Veuillez renseigner une adresse email valide.", 'passwordError' => ""));
+            }
+        } else {
+            //Display an error saying that a field is missing
+            $emailError = $passwordError = '';
+
+            UserController::createSession(false);
+
+            if (empty($_POST["email"])) {
+                $emailError = "Veuillez renseigner votre adresse email.";
+            }
+            if (empty($_POST["password"])) {
+                $passwordError = "Veuillez renseigner votre mot de passe.";
+            }
+            UserController::saveErrors(array('emailError' => $emailError, 'passwordError' => $passwordError));
         }
 
         return $signinIsSuccessful;

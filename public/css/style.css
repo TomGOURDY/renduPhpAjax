@@ -54,6 +54,7 @@ button {
         color: var(--color-font-nav-buttons);
         background-color: var(--color-header-bg);
         text-decoration: none;
+        outline: 0;
     }
         .main-header a:hover, .main-header button:hover {
             text-decoration: underline;
@@ -61,7 +62,6 @@ button {
         .main-header a:active, .main-header button:active {
             transform: scale(0.9);
             color: var(--color-font-nav-buttons-active);
-            outline: 0;
         }
 
 [class$="-buttons"] {
