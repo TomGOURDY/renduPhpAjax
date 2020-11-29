@@ -14,50 +14,24 @@
             <h1>Amis</h1>
             <section id="friends-list-container">
                 <h2>Liste d'amis</h2>
-                <form action="">
-                    <input type="text" name="" id="" placeholder="Rechercher">
+                <form>
+                    <input type="text" name="friend-list-search" id="friend-list-search" placeholder="Rechercher">
                 </form>
                 <section id="friends-list" class="data-wrapper">
-                    <!-- placeholders -->
-                    <article class="friend">
-                        <p class="friend-username connected">John Doe</p>
-                        <hr class="horizontal-guide">
-                        <button class="removeFriend fas fa-users-slash" id="#"></button>
-                    </article>
-                    <article class="friend">
-                        <p class="friend-username disconnected">Jane Doe</p>
-                        <hr class="horizontal-guide">
-                        <button class="removeFriend fas fa-users-slash" id="#"></button>
-                    </article>
                 </section>
             </section>
             <hr class="vertical-separator">
             <section id="friends-search-container">
                 <h2>Ajouter des amis</h2>
-                <form action="">
-                    <input type="text" name="" id="" placeholder="Rechercher">
+                <form>
+                    <input type="text" name="friend-search" id="friend-search" placeholder="Rechercher">
                 </form>
-                <section id="search-results"  class="data-wrapper">
-                    <!-- placeholders -->
-                    <article class="result">
-                        <p class="friend-username">Lorem Ipsum 1</p>
-                        <hr class="horizontal-guide">
-                        <button class="addFriend fas fa-users"></button>
-                    </article>
-                    <article class="result">
-                        <p class="friend-username">Lorem Ipsum 2</p>
-                        <hr class="horizontal-guide">
-                        <button class="addFriend fas fa-users"></button>
-                    </article>
-                    <article class="result">
-                        <p class="friend-username">Lorem Ipsum 2</p>
-                        <hr class="horizontal-guide">
-                        <button class="addFriend fas fa-users"></button>
-                    </article>
+                <section id="search-results" class="data-wrapper">
                 </section>
             </section>
         </div>
     </main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 </html>

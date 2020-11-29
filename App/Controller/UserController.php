@@ -183,4 +183,9 @@ class UserController{
         return $signinIsSuccessful;
     }
 
+    //TODO coder la fonction pour chercher un utilisateur selon son pseudo
+    public static function getUser($searchTerm) {
+        return ;
+    }
+
 }
