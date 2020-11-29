@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
         case "deconnect":
             //Deconnect user
             $controller = new UserController();
-            $controller->deconnect($_SESSION["email"]);
+            $controller->deconnect();
 
             //Redirect to homepage
             header("Location: index.php?page=accueil");

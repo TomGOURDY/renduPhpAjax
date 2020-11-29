@@ -13,10 +13,18 @@ class UserController{
     
     private static function createSession($loggedin = true) {
         $_SESSION["loggedin"] = $loggedin;
+
+        //Get the form values and store them in the session variables
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
             foreach($_POST as $inputName => $value) {
                 $_SESSION['fields'][$inputName] = $value;
             }
+        }
+
+        //If the user is logged in (so they have an id), get that id in a session variable for use later
+        if($loggedin) {
+            $tempModel = new UserModel();
+            $_SESSION['id'] = $tempModel->query("SELECT user_id FROM user WHERE email='".$_POST['email']."'", true)->user_id;
         }
     }
 
@@ -35,18 +43,18 @@ class UserController{
         $_SESSION["loggedin"] = false;
     }
 
-    public function deconnect($email) {
-        UserController::endSession();
-
+    public function deconnect() {
         //Set status of user to offline in database
-        $this->model->prepare("UPDATE user SET isActive=0 WHERE email='$email'");
+        $this->model->prepare("UPDATE user SET isActive=0 WHERE user_id='".$_SESSION['id']."'");
+        
+        UserController::endSession();
     }
 
-    private function connect($username, $email, $password) {
-        UserController::createSession($username, $email, $password);
+    private function connect() {
+        UserController::createSession();
 
         //Change status of user to active
-        $this->model->prepare("UPDATE user SET isActive=1 WHERE email='$email'");
+        $this->model->prepare("UPDATE user SET isActive=1 WHERE user_id='".$_SESSION['id']."'");
     }
 
     public static function redirect() {
@@ -80,7 +88,7 @@ class UserController{
                     $this->model->prepare("INSERT INTO user(username, email, password) VALUES (:username, :email, :password)", array(':username' => $username, ':email' => $email, ':password' => password_hash($password, PASSWORD_DEFAULT)));
 
                     //Connect the user
-                    $this->connect($username, $email, $password);
+                    $this->connect();
 
                     $signupIsSuccessful = true;
                 } else if(!empty($sameEmail)) {
@@ -137,7 +145,7 @@ class UserController{
                 if($userData->email == $email && password_verify($password, $userData->password)) {
     
                     //Connect the user
-                    $this->connect($userData->username, $userData->email, $userData->password);
+                    $this->connect();
     
                     $signinIsSuccessful = true;
                 } else if($userData->email != $email) {
