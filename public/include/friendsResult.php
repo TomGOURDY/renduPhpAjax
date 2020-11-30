@@ -1,13 +1,7 @@
 <?php
     session_start();
-    // require_once('../../App/Controller/friendController.php');
+    
     use App\Controller\FriendController;
-
-    // if(class_exists('FriendController')) { 
-    //     echo 'ok';
-    //     } else { 
-    //     echo 'shit';
-    //     } 
 
     $friendController = new FriendController($_SESSION['id']);
     $friendList = null;

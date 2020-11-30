@@ -1,5 +1,4 @@
 <?php
-
 use App\Controller\UserController;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) {
