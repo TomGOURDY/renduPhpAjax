@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : sam. 28 nov. 2020 à 01:08
+-- Généré le : mar. 01 déc. 2020 à 16:51
 -- Version du serveur :  5.7.24
 -- Version de PHP : 7.2.19
 
@@ -20,6 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `projetgroupephp`
 --
+DROP DATABASE IF EXISTS `projetgroupephp`;
 CREATE DATABASE IF NOT EXISTS `projetgroupephp` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `projetgroupephp`;
 
@@ -60,7 +61,8 @@ DROP TABLE IF EXISTS `friendship`;
 CREATE TABLE `friendship` (
   `friendship_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `friend_id` int(11) NOT NULL
+  `friend_id` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -106,13 +108,6 @@ CREATE TABLE `user` (
   `isActive` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Déchargement des données de la table `user`
---
-
-INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `isActive`) VALUES
-(1, 'test', 'test@gmail.com', '$2y$10$/2oQS6t3/QRpniJ0Y3pmEejGn4Kxy3S7a7k3YWV0Ca6PUF6/9EOKG', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -150,7 +145,7 @@ ALTER TABLE `chat_thread`
 --
 ALTER TABLE `friendship`
   ADD PRIMARY KEY (`friendship_id`),
-  ADD KEY `fk_friendship_user_userid` (`user_id`),
+  ADD UNIQUE KEY `unique_userid_friendid` (`user_id`,`friend_id`) USING BTREE,
   ADD KEY `fk_friendship_user_friendid` (`friend_id`);
 
 --
@@ -221,7 +216,7 @@ ALTER TABLE `poll_answer`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `user_answer`

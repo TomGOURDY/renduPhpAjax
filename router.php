@@ -44,18 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
 } else if (array_key_exists("page", $_GET)) {
     switch ($_GET["page"]) {
         case 'accueil':
-            require ROOT."/App/View/accueilView.php";
+            require ROOT."/App/View/AccueilView.php";
         break;
         case 'connexion':
-            require ROOT."/App/View/connexionView.php";
+            require ROOT."/App/View/ConnexionView.php";
             break;
         case 'inscription':
-            require ROOT."/App/View/inscriptionView.php";
+            require ROOT."/App/View/InscriptionView.php";
             break;
         case 'amis':
-            require ROOT."/App/View/friendsView.php";
+            require ROOT."/App/View/FriendsView.php";
             break;
     }
 } else {
-    require ROOT."/App/View/accueilView.php"; //Default page
+    require ROOT."/App/View/AccueilView.php"; //Default page
 }
