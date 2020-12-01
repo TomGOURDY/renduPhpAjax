@@ -1,6 +1,5 @@
 <?php
 namespace App\Controller;
-
 use App\Model\UserModel;
 
 class UserController{
@@ -57,8 +56,8 @@ class UserController{
         $this->model->prepare("UPDATE user SET isActive=1 WHERE user_id='".$_SESSION['id']."'");
     }
 
-    public static function redirect() {
-        if (session_status() == PHP_SESSION_ACTIVE && $_SESSION['loggedin']) {
+    public static function redirect($mustBeLoggedIn) {
+        if (session_status() == PHP_SESSION_ACTIVE && $_SESSION['loggedin'] != $mustBeLoggedIn) {
             header("Location: index.php?page=accueil");
             exit;
         }
@@ -181,6 +180,11 @@ class UserController{
         }
 
         return $signinIsSuccessful;
+    }
+
+    //TODO coder la fonction pour chercher un utilisateur selon son pseudo
+    public static function getUser($searchTerm) {
+        return ;
     }
 
 }
