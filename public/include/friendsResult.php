@@ -10,9 +10,7 @@
     //Get the friends list
     if (isset($_POST) && array_key_exists('search', $_POST)) {
         $friendList = $friendController->getUserList($_POST['search']);
-    }// else {
-    //     $friendList = $friendController->getUserList();
-    // }
+    }
 
     foreach ($friendList as $friend) {
         $connection = "";

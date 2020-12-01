@@ -10,9 +10,7 @@
     //Get the user list
     if (isset($_POST) && array_key_exists('search', $_POST)) {
         $userList = $friendController->getUserList($_POST['search'], false);
-    }//  else {
-    //     $friendList = $friendController->getUserList($_POST['search'],false);
-    // }
+    }
 
     foreach ($userList as $user) {
         echo '<article class="result">';
