@@ -6,16 +6,13 @@ $(document).ready(function () {
 
     $('#friend-list-search').on('input', function(){
         clearTimeout(typingTimerFriendListSearch);
-        // if ($('#friend-list-search').val()) {
+
         typingTimerFriendListSearch = setTimeout(getUserList('./include/friendsResult.php', '#friends-list', searchTerm = $('#friend-list-search').val()), doneTypingInterval);
-        // }
     });
     $('#friend-search').on('input', function(){
         clearTimeout(typingTimerFriendSearch);
-        // if ($('#friend-search').val()) {
+
         typingTimerFriendSearch = setTimeout(getUserList('./include/userSearchResult.php', '#search-results', searchTerm = $('#friend-search').val()), doneTypingInterval);
-        //TODO faire en sorte que quand rien est affiché dans la barre d'ajout d'amis, rien ne s'affiche dans la barre de résultats
-        // }
     });
 
     //Click on addFriend button
@@ -54,7 +51,6 @@ $(document).ready(function () {
         });
     });
 
-    //Show all friends on page loading
     function getUserList (file, destination, searchTerm = "") {
         $.ajax({
             url: file,
@@ -68,5 +64,6 @@ $(document).ready(function () {
     }
 
     //Exec
+    //Show all friends on page loading
     getUserList('./include/friendsResult.php', '#friends-list');
 });
