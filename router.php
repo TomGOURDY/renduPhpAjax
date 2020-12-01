@@ -1,4 +1,5 @@
 <?php
+use App\Controller\FriendController;
 use App\Controller\UserController;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) {
@@ -39,6 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
                 header("Location: index.php?page=inscription");
                 exit;
             }
+            break;
+        case 'addFriend':
+            session_start();
+            require_once("./Autoloader.php");
+            Autoloader::register();
+            $controller = new FriendController($_SESSION['id']);
+            $controller->addFriend($_POST['friendID']);
             break;
     }
 } else if (array_key_exists("page", $_GET)) {
