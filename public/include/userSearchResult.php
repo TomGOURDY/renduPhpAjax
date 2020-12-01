@@ -16,6 +16,6 @@
         echo '<article class="result">';
         echo "<p>$user->username</p>";
         echo '<hr class="horizontal-guide">';
-        echo "<button id=\"addUser-$user->user_id\" class=\"addFriend fas fa-users\" value=\"$user->user_id\"></button>";
+        echo "<button class=\"addFriend fas fa-users\" value=\"$user->user_id\"></button>";
         echo '</article>';
     }

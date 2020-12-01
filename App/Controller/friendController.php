@@ -21,9 +21,9 @@ class FriendController {
             }
         } else {
             if ($searchTerm == "") {
-                return $this->model->query("SELECT user_id, username FROM user WHERE user_id NOT IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) ORDER BY username;");
+                return $this->model->query("SELECT user_id, username FROM user WHERE user_id NOT IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) AND user_id <> ".$this->model->getUserID()." ORDER BY username;");
             } else {
-                return $this->model->query("SELECT user_id, username FROM user WHERE user_id NOT IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) AND username LIKE '%$searchTerm%' ORDER BY username;");
+                return $this->model->query("SELECT user_id, username FROM user WHERE user_id NOT IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) AND user_id <> ".$this->model->getUserID()."  AND username LIKE '%$searchTerm%' ORDER BY username;");
             }
         }
     }

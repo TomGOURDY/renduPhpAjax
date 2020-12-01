@@ -48,6 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
             $controller = new FriendController($_SESSION['id']);
             $controller->addFriend($_POST['friendID']);
             break;
+        case 'removeFriend':
+            session_start();
+            require_once("./Autoloader.php");
+            Autoloader::register();
+            $controller = new FriendController($_SESSION['id']);
+            $controller->removeFriend($_POST['friendID']);
+            break;
     }
 } else if (array_key_exists("page", $_GET)) {
     switch ($_GET["page"]) {

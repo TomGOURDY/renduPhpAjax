@@ -12,13 +12,14 @@ $(document).ready(function () {
     });
     $('#friend-search').on('input', function(){
         clearTimeout(typingTimerFriendSearch);
-        if ($('#friend-search').val()) {
-            typingTimerFriendSearch = setTimeout(getUserList('./include/userSearchResult.php', '#search-results', searchTerm = $('#friend-search').val()), doneTypingInterval);
-        }
+        // if ($('#friend-search').val()) {
+        typingTimerFriendSearch = setTimeout(getUserList('./include/userSearchResult.php', '#search-results', searchTerm = $('#friend-search').val()), doneTypingInterval);
+        //TODO faire en sorte que quand rien est affiché dans la barre d'ajout d'amis, rien ne s'affiche dans la barre de résultats
+        // }
     });
 
     //Click on addFriend button
-    $('#search-results').on("click", '[id^=addUser-]', function () {
+    $('#search-results').on("click", '.addFriend', function () {
         $.ajax({
             url: "../router.php",
             method: 'post',
@@ -27,12 +28,28 @@ $(document).ready(function () {
                 friendID: $(this).val()
             },
             success: function() {
-                console.log('friend added');
                 //Reload the friend list and search list
                 getUserList('./include/friendsResult.php', '#friends-list', searchTerm = $('#friend-list-search').val());
-                console.log('friend list updated');
                 getUserList('./include/userSearchResult.php', '#search-results', searchTerm = $('#friend-search').val());
-                console.log('search list updated');
+            }
+        });
+    });
+    
+    //Click on removeFriend button
+    $('#friends-list').on("click", '.removeFriend', function () {
+        $.ajax({
+            url: "../router.php",
+            method: 'post',
+            data: { 
+                action: 'removeFriend',
+                friendID: $(this).val()
+            },
+            success: function() {
+                //Reload the friend list and search list
+                getUserList('./include/friendsResult.php', '#friends-list', searchTerm = $('#friend-list-search').val());
+                if ($('#friend-search').val()) {
+                    getUserList('./include/userSearchResult.php', '#search-results', searchTerm = $('#friend-search').val());
+                }
             }
         });
     });
