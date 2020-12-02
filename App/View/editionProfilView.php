@@ -27,7 +27,7 @@ if (isset($_SESSION['id'])) {
         $mdp1 = sha1($_POST['newmdp1']);
         $mdp2 = sha1($_POST['newmdp2']);
         if ($mdp1 == $mdp2) {
-            $insertmdp = $bdd->prepare("UPDATE user SET password = ? WHERE id = ?");
+            $insertmdp = $bdd->prepare("UPDATE user SET 'password' = ? WHERE user_id = ?");
             $insertmdp->execute(array($mdp1, $_SESSION['id']));
             header('Location: index.php?user_id=' . $_SESSION['id']);
         } else {
