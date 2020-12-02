@@ -55,6 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
         case 'amis':
             require ROOT."/App/View/friendsView.php";
             break;
+        case 'creasondage':
+            require ROOT."/App/View/NewPollView.php";
+            break;
     }
 } else {
     require ROOT."/App/View/accueilView.php"; //Default page

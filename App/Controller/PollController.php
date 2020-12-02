@@ -34,7 +34,7 @@ class PollController{
         );
         //Verification qu'aucun champ n'est vide
         if(!empty($_POST["question_sondage"]) && !empty($_POST["sondage_deadline"]) && !empty($_POST["reponse_sondage1"]) && !empty($_POST["reponse_sondage2"])) {
-            $this->model->prepare("INSERT ")
+            $this->model->prepare("INSERT ");
         } else {
             //Erreur si champ vide
             $questionError = $deadlineError = $reponse1Error = $reponse2Error = '';
