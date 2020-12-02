@@ -17,7 +17,7 @@ class UserController{
         //Get the form values and store them in the session variables
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
             foreach($_POST as $inputName => $value) {
-                $_SESSION['fields'][$inputName] = $value;
+                $_SESSION['fields'][$inputName] = $value; 
             }
         }
 

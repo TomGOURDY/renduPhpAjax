@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
                 header("Location: index.php?page=connexion");
                 exit;
             }
+            
             break;
         case 'signup':
             //Sign the new user up
@@ -53,7 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
         case 'inscription':
             require ROOT."/App/View/inscriptionView.php";
             break;
+        case 'profil':
+                require ROOT."/App/View/editionProfilView.php";
+                break;
     }
 } else {
     require ROOT."/App/View/accueilView.php"; //Default page
 }
+
