@@ -1,6 +1,5 @@
 <aside>
-    <h2>Amis de 
-        <!-- <php get user id = show pseudouser -->
+    <h2>Amis de <?php echo($_SESSION['id'])?>
     </h2>
     <ul>
         <!-- <php for each "friendship" de l'utilisateur(id) {
