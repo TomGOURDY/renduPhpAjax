@@ -16,39 +16,30 @@ class PollController{
         }
     }
 
-    public function __construct($reponse)
+    public function __construct()
     {
-        $this->model = new PollModel($reponse);
+        $this->model = new PollModel();
+        // $this->model = new PollModel($reponse);
     }
 
     public function newPoll() {
         $question = $this->model->question = htmlspecialchars($_POST["question_sondage"]);
         $deadline = $this->model->deadline = $_POST["sondage_deadline"];
-        $reponse1 = $this->model->reponse1 = array(
+        $reponse1 = array(
             'intitule' => htmlspecialchars($_POST["reponse_sondage1"]),
             'isTrue' => $_POST["is-correct"] == 'is_correct_1',
         );
-        $reponse2 = $this->model->reponse2 = array(
+        $reponse2 = array(
             'intitule' => htmlspecialchars($_POST["reponse_sondage2"]),
             'isTrue' => $_POST["is-correct"] == 'is_correct_2',
         );
         //Verification qu'aucun champ n'est vide
         if(!empty($_POST["question_sondage"]) && !empty($_POST["sondage_deadline"]) && !empty($_POST["reponse_sondage1"]) && !empty($_POST["reponse_sondage2"])) {
-            $this->model->prepare("INSERT INTO poll(creator_id, title, deadline)
-            VALUES (:sondagecreator, :question, :deadline);
-            INSERT INTO poll_answer(poll_id, title, is_correct)
-            VALUES 
-                (last_insert_id(), :reponse1, :reponse1Statut)
-                (last_insert_id(), :reponse2, :reponse2Statut)", 
-                array(':sondagecreator' => $_SESSION['id'],
-                ':question' => $question,
-                ':deadline' => $deadline,
-                ':reponse1' => $reponse1['intitule'],
-                ':reponse1Statut' => $reponse1['isTrue'],
-                ':reponse2' => $reponse2['intitule'],
-                ':reponse2Statut' => $reponse2['isTrue'],
-                )); 
-                
+            $isSuccessful = $this->model->prepare("INSERT INTO poll(creator_id, title, deadline) VALUES (:sondagecreator, :question, :deadline);", array(':sondagecreator' => $_SESSION['id'], ':question' => $question, ':deadline' => $deadline));
+            $lastId = $this->model->getLastInsertId();
+            $isSuccessful = $this->model->prepare("INSERT INTO poll_answer(poll_id, title, is_correct)
+            VALUES (:lastinsertid, :reponse1, :reponse1Statut);", array(':lastinsertid' => $lastId,':reponse1' => $reponse1['intitule'], ':reponse1Statut' => $reponse1['isTrue'] ? "1" : "0"));
+            $isSuccessful = $this->model->prepare("INSERT INTO poll_answer(poll_id, title, is_correct) VALUES (:lastinsertid, :reponse2, :reponse2Statut);", array(':lastinsertid' => $lastId, ':reponse2' => $reponse2['intitule'], ':reponse2Statut' => $reponse2['isTrue'] ? "1" : "0"));
         }else {
             //Erreur si champ vide
             $questionError = $deadlineError = $reponse1Error = $reponse2Error = '';

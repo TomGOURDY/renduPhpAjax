@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
             break;
         case 'sendpoll':
                 //Send the new poll in the database
-                $controller = new PollController;
+                $controller = new PollController();
                 $success = $controller->newPoll();
     
                 //Redirect depending of the success of the signing up

@@ -48,4 +48,8 @@ class Database{
         $prepare = $this->pdo->prepare($statement);
         return $prepare->execute($data);
     }
+
+    public function getLastInsertId() {
+        return $this->pdo->lastInsertId();
+    }
 }

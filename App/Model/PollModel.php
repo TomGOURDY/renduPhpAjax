@@ -25,8 +25,8 @@ class PollModel extends Database {
      */
     public $reponse;
 
-    public function __construct($reponse)
+    public function __construct()
     {
-        $this->reponse = $reponse;
+        parent::__construct();
     }
 }
