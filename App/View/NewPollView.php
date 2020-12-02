@@ -12,7 +12,7 @@
 <body>
     <?php include "./include/header.php"; ?>
     <main>
-        <form id="newPoll" action="index.php?page=creasondage" method="POST">
+        <form id="newPoll" action="index.php" method="POST">
             <label for="question_sondage">Question:</label><br/>
             <input type="text" placeholder="Votre question" id="question_sondage" name="question_sondage" value="<?= PollController::fieldvalue("fields", 'question'); ?>"><br/>
             <div class='errorMessage'><?= PollController::fieldvalue("errors", 'questionError'); ?></div>

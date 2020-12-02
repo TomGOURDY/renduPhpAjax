@@ -22,20 +22,34 @@ class PollController{
     }
 
     public function newPoll() {
-        $this->model->question = htmlspecialchars($_POST["question_sondage"]);
-        $this->model->deadline = $_POST["sondage_deadline"];
-        $this->model->reponse1 = array(
+        $question = $this->model->question = htmlspecialchars($_POST["question_sondage"]);
+        $deadline = $this->model->deadline = $_POST["sondage_deadline"];
+        $reponse1 = $this->model->reponse1 = array(
             'intitule' => htmlspecialchars($_POST["reponse_sondage1"]),
             'isTrue' => $_POST["is-correct"] == 'is_correct_1',
         );
-        $this->model->reponse2 = array(
+        $reponse2 = $this->model->reponse2 = array(
             'intitule' => htmlspecialchars($_POST["reponse_sondage2"]),
             'isTrue' => $_POST["is-correct"] == 'is_correct_2',
         );
         //Verification qu'aucun champ n'est vide
         if(!empty($_POST["question_sondage"]) && !empty($_POST["sondage_deadline"]) && !empty($_POST["reponse_sondage1"]) && !empty($_POST["reponse_sondage2"])) {
-            $this->model->prepare("INSERT ");
-        } else {
+            $this->model->prepare("INSERT INTO poll(creator_id, title, deadline)
+            VALUES (:sondagecreator, :question, :deadline);
+            INSERT INTO poll_answer(poll_id, title, is_correct)
+            VALUES 
+                (last_insert_id(), :reponse1, :reponse1Statut)
+                (last_insert_id(), :reponse2, :reponse2Statut)", 
+                array(':sondagecreator' => $_SESSION['id'],
+                ':question' => $question,
+                ':deadline' => $deadline,
+                ':reponse1' => $reponse1['intitule'],
+                ':reponse1Statut' => $reponse1['isTrue'],
+                ':reponse2' => $reponse2['intitule'],
+                ':reponse2Statut' => $reponse2['isTrue'],
+                )); 
+                
+        }else {
             //Erreur si champ vide
             $questionError = $deadlineError = $reponse1Error = $reponse2Error = '';
 

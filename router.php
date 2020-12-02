@@ -1,5 +1,6 @@
 <?php
 use App\Controller\UserController;
+use App\Controller\PollController;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) {
     switch($_POST["action"]) {
@@ -40,6 +41,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
                 exit;
             }
             break;
+        case 'sendpoll':
+                //Send the new poll in the database
+                $controller = new PollController;
+                $success = $controller->newPoll();
+    
+                //Redirect depending of the success of the signing up
+                if ($success) {
+                    header("Location: index.php?page=sondagesuccess");
+                    exit;
+                } else {
+                    header("Location: index.php?page=creasondage");
+                    exit;
+                }
+                break;
     }
 } else if (array_key_exists("page", $_GET)) {
     switch ($_GET["page"]) {
