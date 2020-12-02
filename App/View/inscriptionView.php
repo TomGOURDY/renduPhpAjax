@@ -1,5 +1,5 @@
 <?php use App\Controller\UserController;
-      UserController::redirect(); ?>
+      UserController::redirect(false); ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

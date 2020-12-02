@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php use App\Controller\UserController;
+      UserController::redirect(true); ?>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">

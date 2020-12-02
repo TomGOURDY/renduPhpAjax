@@ -1,5 +1,7 @@
 <?php
 namespace App\Controller;
+// include('../Model/FriendModel.php');
+
 use App\Model\FriendModel;
 
 class FriendController {
@@ -9,12 +11,21 @@ class FriendController {
         $this->model = new FriendModel($userID);
     }
 
-    public function getFriendList($searchTerm = "")
+    public function getUserList($searchTerm = "", $isFriendWith = true)
     {
-        if ($searchTerm == "") {
-            return $this->model->query("SELECT user_id, username, isActive FROM user WHERE user_id IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID()."));");
+        if($isFriendWith) {
+            if ($searchTerm == "") {
+                return $this->model->query("SELECT user_id, username, isActive FROM user WHERE user_id IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) ORDER BY username;");
+            } else {
+                return $this->model->query("SELECT user_id, username, isActive FROM user WHERE user_id IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) AND username LIKE '%$searchTerm%' ORDER BY username;");
+            }
         } else {
-            return $this->model->query("SELECT user_id, username, isActive FROM user WHERE user_id IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) AND username LIKE '%$searchTerm%';");
+            if ($searchTerm == "") {
+                return false;
+                // return $this->model->query("SELECT user_id, username FROM user WHERE user_id NOT IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) AND user_id <> ".$this->model->getUserID()." ORDER BY username;");
+            } else {
+                return $this->model->query("SELECT user_id, username FROM user WHERE user_id NOT IN (SELECT DISTINCT IF(user_id = ".$this->model->getUserID().", friend_id, user_id) FROM friendship WHERE status = 1 AND (user_id = ".$this->model->getUserID()." OR friend_id = ".$this->model->getUserID().")) AND user_id <> ".$this->model->getUserID()."  AND username LIKE '%$searchTerm%' ORDER BY username;");
+            }
         }
     }
 

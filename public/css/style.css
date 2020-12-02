@@ -120,7 +120,14 @@ hr {
         height: 100%;
         display: inline-block;
         border-radius: 3px;
+        cursor: pointer;
     }
+        .content-container .data-wrapper button:hover {
+            transform: scale(1.08);
+        }
+        .content-container .data-wrapper button:active {
+            transform: scale(0.92);
+        }
     .addFriend {
         background-color: rgba(0, 128, 0, 0.7);
     }

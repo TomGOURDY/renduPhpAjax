@@ -1,5 +1,5 @@
 <?php use App\Controller\UserController;
-      UserController::redirect(); ?>
+      UserController::redirect(false); ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,7 +11,7 @@
 <body>
     <h1>Connexion</h1>
     <form id="loginForm" action="index.php" method="post">
-        <label for="email">Email</label><br>
+        <label for="email">Email<label><br>
         <input type="text" id="email" name="email" value="<?= UserController::fieldvalue("fields", 'email'); ?>"><br>
         <div class='errorMessage'><?= UserController::fieldvalue("errors", 'emailError'); ?></div>
 
