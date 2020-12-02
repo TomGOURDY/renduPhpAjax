@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
                 header("Location: index.php?page=connexion");
                 exit;
             }
+            
             break;
         case 'signup':
             //Sign the new user up
@@ -88,6 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists("action", $_POST)) 
         case 'creasondage':
             require ROOT."/App/View/NewPollView.php";
             break;
+        case 'profil':
+                require ROOT."/App/View/editionProfilView.php";
+                break;
     }
 } else {
     require ROOT."/App/View/AccueilView.php"; //Default page
